@@ -11,7 +11,7 @@ const categoryNames = [
     "How-to and style",
     "Music",
     "News and politics",
-    "Peaople and blogs",
+    "People and blogs",
     "Pets and animals",
     "Science and technology",
     "Sports",
