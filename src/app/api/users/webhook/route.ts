@@ -49,13 +49,40 @@ export async function POST(req: Request) {
     // For this guide, log payload to console
     const eventType = evt.type
 
+    // if (eventType === 'user.created') {
+    //     const { data } = evt
+    //     await db.insert(users).values({
+    //         clerkId: data.id,
+    //         name: `${data.first_name} ${data.last_name}`,
+    //         imageUrl: data.image_url,
+    //     });
+    // }
+
     if (eventType === 'user.created') {
         const { data } = evt
+        const name = `${data.first_name || ''} ${data.last_name || ''}`.trim() || 'Unknown User';
+        const imageUrl = data.image_url || `https://api.dicebear.com/7.x/initials/svg?seed=${name}`;
+
         await db.insert(users).values({
             clerkId: data.id,
-            name: `${data.first_name} ${data.last_name}`,
-            imageUrl: data.image_url,
-        });
+            name: name,
+            imageUrl: imageUrl,
+        })
+
+        console.log('✅ User created in DB:', data.id)
+    }
+
+    if (eventType === 'user.updated') {
+        const { data } = evt
+        const name = `${data.first_name || ''} ${data.last_name || ''}`.trim() || 'Unknown User';
+        const imageUrl = data.image_url || `https://api.dicebear.com/7.x/initials/svg?seed=${name}`;
+
+        await db.update(users).set({
+            name: name,
+            imageUrl: imageUrl,
+        }).where(eq(users.clerkId, data.id))
+
+        console.log('✅ User updated in DB:', data.id)
     }
 
     if (eventType === 'user.deleted') {
@@ -68,14 +95,14 @@ export async function POST(req: Request) {
         await db.delete(users).where(eq(users.clerkId, data.id));
     }
 
-    if (eventType === 'user.updated') {
-        const { data } = evt;
+    // if (eventType === 'user.updated') {
+    //     const { data } = evt;
 
-        await db.update(users).set({
-            name: `${data.first_name} ${data.last_name}`,
-            imageUrl: data.image_url,
-        }).where(eq(users.clerkId, data.id));
-    }
+    //     await db.update(users).set({
+    //         name: `${data.first_name} ${data.last_name}`,
+    //         imageUrl: data.image_url,
+    //     }).where(eq(users.clerkId, data.id));
+    // }
 
     return new Response('Webhook received', { status: 200 })
   } catch (err) {

@@ -5,6 +5,7 @@ import { TRPCProvider } from "@/trpc/client";
 
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { NoFlashScript } from "@/components/no-flash";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -20,16 +21,30 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // return (
+  //   <ClerkProvider afterSignOutUrl="/">
+  //     <html lang="en">
+  //       <body className={inter.className}>
+  //         <TRPCProvider>
+  //           <Toaster />
+  //         {children}
+  //         </TRPCProvider>
+  //       </body>
+  //     </html>
+  //   </ClerkProvider>
+  // );
   return (
-    <ClerkProvider afterSignOutUrl="/">
-      <html lang="en">
-        <body className={inter.className}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className} suppressHydrationWarning>
+        <NoFlashScript />
+        <ClerkProvider afterSignOutUrl="/">
           <TRPCProvider>
             <Toaster />
-          {children}
+            {children}
           </TRPCProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   );
+
 }

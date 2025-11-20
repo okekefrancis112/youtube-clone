@@ -7,6 +7,7 @@ export const users = pgTable("users", {
     name: text("name").notNull(),
     // TODO: ADD BANNER FIELDS
     imageUrl: text("image_url").notNull(),
+    
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updateAt: timestamp("updated_at").defaultNow().notNull(),
 }, (t) => [uniqueIndex("clerk_id_idx").on(t.clerkId)]);
@@ -19,20 +20,22 @@ export const categories = pgTable("categories", {
     id: uuid("id").primaryKey().defaultRandom(),
     name: text("name").notNull().unique(),
     description: text("description"),
+
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updateAt: timestamp("updated_at").defaultNow().notNull(),
 }, (t) => [uniqueIndex("name_idx").on(t.name)]);
 
-export const categoryRelations = relations(categories, ({ many }) => ({
+export const categoryRelations = relations(users, ({ many }) => ({
     videos: many(videos),
 }));
 
-export const videos =pgTable("videos", {
+export const videos = pgTable("videos", {
     id: uuid("id").primaryKey().defaultRandom(),
     title: text("title").notNull(),
     description: text("description"),
     userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
     categoryId: uuid("category_id").references(() => categories.id, { onDelete: "set null" }),
+
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updateAt: timestamp("updated_at").defaultNow().notNull(),
 });

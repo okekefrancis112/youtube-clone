@@ -14,12 +14,12 @@ export const StudioUploadModal = () => {
         },
         onError: () => {
             toast.error("Something went wrong");
-        }
-    })
+        },
+    });
     return (
         <Button variant="secondary" onClick={() => create.mutate()} disabled={create.isPending}>
             {create.isPending ? <Loader2Icon className="animate-spin" /> : <PlusIcon />}
             Create
         </Button>
-    )
-}
+    );
+};

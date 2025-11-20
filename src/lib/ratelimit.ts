@@ -3,8 +3,8 @@ import { redis } from './redis';
 
 export const ratelimit = new Ratelimit({
   redis,
-  limiter: Ratelimit.slidingWindow(10, '10 s'),
-  analytics: true,
-  enableProtection: true,
-  prefix: 'ratelimit',
+  limiter: Ratelimit.slidingWindow(100, '10 s'),
+  // analytics: true,
+  // enableProtection: true,
+  // prefix: 'ratelimit',
 });
