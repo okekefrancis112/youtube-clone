@@ -10,7 +10,7 @@ export interface Category {
   name: string;
   description: string | null;
   createdAt: Date;
-  updateAt: Date;
+  updatedAt: Date;
 
 }
 
