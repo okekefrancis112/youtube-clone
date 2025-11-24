@@ -14,7 +14,7 @@
   "dependencies": {
     "@ai-sdk/ui-utils": "^1.2.11",
     "@clerk/nextjs": "6.10.3",
-    "@hookform/resolvers": "^5.0.1",
+    "@hookform/resolvers": "^5.2.2",
     "@mux/mux-node": "9.0.1",
     "@mux/mux-player-react": "^3.9.0",
     "@mux/mux-uploader-react": "1.1.1",
@@ -74,7 +74,7 @@
     "react-day-picker": "^8.10.1",
     "react-dom": "^19.0.0",
     "react-error-boundary": "5.0.0",
-    "react-hook-form": "^7.55.0",
+    "react-hook-form": "^7.66.1",
     "react-resizable-panels": "^2.1.7",
     "recharts": "^2.15.2",
     "server-only": "0.0.1",
