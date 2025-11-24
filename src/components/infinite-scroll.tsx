@@ -39,7 +39,7 @@ export const InfiniteScroll = ({
                 </Button>
             ) : (
                 <p className="text-xs text-muted-foreground">
-                    You have reachhed the end of the list
+                    You have reached the end of the list
                 </p>
             )}
         </div>
