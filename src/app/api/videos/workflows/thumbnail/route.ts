@@ -55,6 +55,8 @@ export const { POST } = serve(
         throw new Error("Bad request");
     }
 
+    // !TODO: TEST THIS CLEAN-UP PROPERLY
+
     await context.run("cleanup-thumbnail", async () => {
         if (video.thumbnailKey) {
             await utapi.deleteFiles(video.thumbnailKey);

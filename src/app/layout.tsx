@@ -21,18 +21,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // return (
-  //   <ClerkProvider afterSignOutUrl="/">
-  //     <html lang="en">
-  //       <body className={inter.className}>
-  //         <TRPCProvider>
-  //           <Toaster />
-  //         {children}
-  //         </TRPCProvider>
-  //       </body>
-  //     </html>
-  //   </ClerkProvider>
-  // );
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
@@ -46,5 +34,4 @@ export default function RootLayout({
       </body>
     </html>
   );
-
 }
