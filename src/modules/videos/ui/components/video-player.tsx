@@ -28,6 +28,8 @@ export const VideoPlayer = ({
             onPlay={onPlay}
             streamType="on-demand"
             defaultHiddenCaptions={false}
+            muted
+            playsInline
         />
     );
 };
