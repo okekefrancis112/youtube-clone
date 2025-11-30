@@ -17,7 +17,7 @@ export const videoViewsRouter = createTRPCRouter({
                 .where(
                     and(
                         eq(videoViews.videoId, videoId),
-                        eq(videoViews.userId, videoId)
+                        eq(videoViews.userId, userId) 
                     )
                 );
 
