@@ -26,7 +26,7 @@ const CommentsSectionSuspense = ({ videoId }: CommentsSectionProps) => {
         <div className="mt-6">
             <div className="flex flex-col gap-6">
                 <h1>
-                    0 Comments
+                    {comments.length} {comments.length === 1 ? "Comment" : "Comments"}
                 </h1>
                 <CommentForm videoId={videoId} />
                 <div className="flex flex-col gap-4 mt-2">
