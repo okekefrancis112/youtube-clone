@@ -79,15 +79,34 @@ import { ratelimit } from '@/lib/ratelimit';
 import { auth, clerkClient } from '@clerk/nextjs/server';
 import type { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
 
-export const createTRPCContext = async (opts: FetchCreateContextFnOptions) => {
-  const { userId } = await auth();
+// export const createTRPCContext = async (opts: FetchCreateContextFnOptions) => {
+//   const { userId } = await auth();
 
-  console.log('Auth User ID:', userId);
+//   console.log('Auth User ID:', userId);
+//   console.log('Headers>>>>>>>>>>>>>>>>>:', opts.req.headers);
 
-  return {
-    clerkUserId: userId,
-    headers: opts.req.headers,
-  };
+//   return {
+//     clerkUserId: userId,
+//     headers: opts.req.headers,
+//   };
+// };
+
+export const createTRPCContext = async (opts?: FetchCreateContextFnOptions) => {
+  if (!opts) {
+    return { clerkUserId: null, isHydration: true, isSSR: true };
+  }
+
+  const isClientHydration = typeof window !== "undefined" && !opts.req;
+  if (isClientHydration) {
+    return { clerkUserId: null, isHydration: true, isSSR: false };
+  }
+
+  try {
+    const { userId } = await auth();
+    return { clerkUserId: userId, isHydration: false, isSSR: false };
+  } catch {
+    return { clerkUserId: null, isHydration: false, isSSR: false };
+  }
 };
 
 export type Context = Awaited<ReturnType<typeof createTRPCContext>>;
