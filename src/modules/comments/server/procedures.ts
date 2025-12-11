@@ -8,7 +8,7 @@ export const commentsRouter = createTRPCRouter({
     create: protectedProcedure
         .input(z.object({
             videoId: z.string().uuid(),
-            value: z.string(),
+            value: z.string().min(1, "Comment cannot be empty").max(10000, "Comment is too long"),
         }))
         .mutation(async ({ input, ctx }) => {
             const { videoId, value } = input;
