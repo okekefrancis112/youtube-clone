@@ -26,7 +26,7 @@ export const VideoTopRowSkeleton = () => {
                         <Skeleton className="h-5 w-3/5 md:w-1/5" />
                     </div>
                 </div>
-                <Skeleton className="h-9 w-2/6 md:1/6 rounded-full" />
+                <Skeleton className="h-9 w-2/6 md:w-1/6 rounded-full" />
             </div>
             <div className="h-[120px] w-full" />
         </div>
