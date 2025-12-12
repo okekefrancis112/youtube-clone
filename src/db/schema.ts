@@ -120,7 +120,7 @@ export const videoRelations = relations(videos, ({ one, many }) => ({
 
 export const comments = pgTable("comments", {
     id: uuid("id").primaryKey().defaultRandom(),
-    parentId: uuid("parents_id"),
+    parentId: uuid("parent_id"),
     userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
     videoId: uuid("video_id").references(() => videos.id, { onDelete: "cascade" }).notNull(),
     value: text("value").notNull(),
