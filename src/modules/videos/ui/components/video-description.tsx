@@ -40,6 +40,7 @@ export const VideoDescription = ({
                 >
                     {description || "No description"}
                 </p>
+                {/* TODO: FIX THE ISSUE */}
                 <div className="flex items-center gap-1 mt-4 text-sm font-medium">
                     {isExpanded ? (
                         <>
