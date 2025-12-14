@@ -24,20 +24,35 @@ import { THUMBNAIL_FALLBACK } from "@/modules/videos/constants";
 import { ThumbnailUploadModal } from "../components/thumbnail-upload-modal";
 import { ThumbnailGenerateModal } from "../components/thumbnail-generate-modal";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AuthGate } from "../../auth-gate";
+import { APP_URL } from "@/constants";
 
 interface FormSectionProps {
     videoId: string;
 }
 
+// export const FormSection = ({ videoId }: FormSectionProps) => {
+//     return (
+//         <Suspense fallback={<FormSectionSkeleton />}>
+//             <ErrorBoundary fallback={<p>Error</p>}>
+//                 <FormSectionSuspense videoId={videoId} />
+//             </ErrorBoundary>
+//         </Suspense>
+//     );
+// }
+
 export const FormSection = ({ videoId }: FormSectionProps) => {
-    return (
-        <Suspense fallback={<FormSectionSkeleton />}>
-            <ErrorBoundary fallback={<p>Error</p>}>
-                <FormSectionSuspense videoId={videoId} />
-            </ErrorBoundary>
-        </Suspense>
-    );
-}
+  return (
+    <AuthGate>
+      <Suspense fallback={<FormSectionSkeleton />}>
+        <ErrorBoundary fallback={<p>Error</p>}>
+          <FormSectionSuspense videoId={videoId} />
+        </ErrorBoundary>
+      </Suspense>
+    </AuthGate>
+  );
+};
+
 
 const FormSectionSkeleton = () => {
     return (
@@ -117,11 +132,22 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
         },
     });
 
-    const remove = trpc.videos.removed.useMutation({
+    const remove = trpc.videos.remove.useMutation({
         onSuccess: () => {
             utils.studio.getMany.invalidate();
             toast.success("Video removed");
             router.push("/studio")
+        },
+        onError: () => {
+            toast.error("Something went wrong");
+        },
+    });
+
+    const revalidate = trpc.videos.revalidate.useMutation({
+        onSuccess: () => {
+            utils.studio.getMany.invalidate();
+            utils.studio.getOne.invalidate({ id: videoId });
+            toast.success("Video revalidated");
         },
         onError: () => {
             toast.error("Something went wrong");
@@ -163,7 +189,7 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
     });
 
     // TODO: Change if deploying outside of VERCEL
-    const fullUrl = `${process.env.VERCEL_URL || "http://localhost:3000"}/videos/${videoId}`;
+    const fullUrl = `${APP_URL || "http://localhost:3000"}/videos/${videoId}`;
     const [isCopied, setIsCopied] = useState(false);
 
     const onCopy = async () => {
@@ -209,6 +235,10 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
+                                    <DropdownMenuItem onClick={() => revalidate.mutate({ id: videoId })}>
+                                        <RotateCcwIcon className="size-4 mr-2" />
+                                        Revalidate
+                                    </DropdownMenuItem>
                                     <DropdownMenuItem onClick={() => remove.mutate({ id: videoId })}>
                                         <TrashIcon className="size-4 mr-2" />
                                         Delete
