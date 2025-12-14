@@ -9,17 +9,19 @@ import { commentReactionsRouter } from '@/modules/comment-reactions/procedures';
 import { suggestionsRouter } from '@/modules/suggestions/server/procedures';
 
 import { createTRPCRouter } from '../init';
+import { searchRouter } from '@/modules/search/server/procedures';
 
 export const appRouter = createTRPCRouter({
   studio: studioRouter,
   videos: videosRouter,
+  search: searchRouter,
   comments: commentsRouter,
   categories: categoriesRouter,
   videoViews: videoViewsRouter,
+  suggestions: suggestionsRouter,
   subscriptions: subscriptionsRouter,
   videoReactions: videoReactionsRouter,
   commentReactions: commentReactionsRouter,
-  suggestions: suggestionsRouter,
 });
 // export type definition of API
 export type AppRouter = typeof appRouter;
