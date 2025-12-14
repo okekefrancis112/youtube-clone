@@ -18,8 +18,6 @@ export const VideoPlayer = ({
     autoPlay,
     onPlay
 }: VideoPlayerProps) => {
-    // if (!playbackId) return null;
-
     return (
         <MuxPlayer
             playbackId={playbackId || ""}

@@ -1,6 +1,8 @@
 // import { DEFAULT_LIMIT } from "@/constants";
-// import { StudioView } from "@/modules/studio/ui/view/studio-view";
+// import { StudioView } from "@/modules/studio/ui/views/studio-view";
 // import { HydrateClient, trpc } from "@/trpc/server";
+
+// export const dynamic = "force-dynamic";
 
 // const Page = async () => {
 //   void trpc.studio.getMany.prefetchInfinite({
@@ -11,13 +13,14 @@
 //     <HydrateClient>
 //       <StudioView />
 //     </HydrateClient>
-//     // <StudioView />
 //   );
 // };
 
 import { DEFAULT_LIMIT } from "@/constants";
 import { StudioView } from "@/modules/studio/ui/views/studio-view";
 import { HydrateClient, trpc } from "@/trpc/server";
+
+export const dynamic = "force-dynamic";
 
 const Page = async () => {
   console.log('=== SERVER COMPONENT DIAGNOSTIC ===');

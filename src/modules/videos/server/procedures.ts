@@ -245,7 +245,7 @@ export const videosRouter = createTRPCRouter({
                 throw new TRPCError({ code: "BAD_REQUEST" });
             }
 
-            const playbackId =  asset.playback_ids?.[0].id;
+            const playbackId =  asset.playback_ids?.[0].id ?? null;
             const duration = asset.duration ? Math.round(asset.duration * 1000) : 0;
 
             // TODO: Potentially find a way to revalidate trackId and trackStatus as well
