@@ -65,7 +65,7 @@ export const POST = async (request: Request) => {
             }
         case "video.asset.ready": {
             const data = payload.data as VideoAssetReadyWebhookEvent["data"];
-            const playbackId = data.playback_ids?.[0].id ?? null;
+            const playbackId = data.playback_ids?.[0]?.id ?? null;
 
             if (!data.upload_id) {
                 return new Response("No upload ID found", { status: 400 });
