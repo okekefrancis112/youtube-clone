@@ -58,14 +58,6 @@ export const CategoriesSectionSuspense = ({ categoryId }: CategoriesSectionProps
   const router = useRouter();
   const [categoriesResult] = trpc.categories.getMany.useSuspenseQuery();
 
-      // Debug logging - check all possible structures
-    console.log("=== CATEGORIES DEBUG ===");
-    console.log("Raw result:", categoriesResult);
-    console.log("Type:", typeof categoriesResult);
-    console.log("Is array:", Array.isArray(categoriesResult));
-    console.log("Keys:", Object.keys(categoriesResult || {}));
-    console.log("========================");
-
   // Type-safe extraction
   let categories: Category[] = [];
 

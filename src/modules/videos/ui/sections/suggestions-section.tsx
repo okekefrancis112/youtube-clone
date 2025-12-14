@@ -3,7 +3,7 @@
 import { DEFAULT_LIMIT } from "@/constants";
 import { trpc } from "@/trpc/client";
 import { VideoRowCard, VideoRowCardSkeleton } from "../components/video-row-card";
-import { VideoGridCard } from "../components/video-grid-card";
+import { VideoGridCard, VideoGridCardSkeleton } from "../components/video-grid-card";
 import { InfiniteScroll } from "@/components/infinite-scroll";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
@@ -36,7 +36,7 @@ const SuggestionsSectionSkeleton = () => {
             </div>
             <div className="block md:hidden space-y-10">
                 {Array.from({ length: 8 }).map((_, index) => (
-                    <VideoRowCardSkeleton key={index} />
+                    <VideoGridCardSkeleton key={index} />
                 ))}
             </div>
         </>
