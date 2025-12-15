@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-interface ThumbnailGenerateModalProps {
+interface PlaylistCreateModalProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
 };
