@@ -43,7 +43,7 @@ export const playlistsRouter = createTRPCRouter({
                             )
                         )
                     : undefined,
-                )).orderBy(desc(playlists.updatedAt), desc(playlists .id))
+                )).orderBy(desc(playlists.updatedAt), desc(playlists.id))
                 // Add 1 to the limit to check if there is more data
                 .limit(limit + 1)
 
