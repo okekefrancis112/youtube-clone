@@ -47,7 +47,7 @@ export const playlistRelations = relations(playlists, ({ one, many }) => ({
         fields: [playlists.userId],
         references: [users.id],
     }),
-    playlistVideos: many(videos),
+    playlistVideos: many(playlistVideos),
 }));
 
 export const users = pgTable("users", {
