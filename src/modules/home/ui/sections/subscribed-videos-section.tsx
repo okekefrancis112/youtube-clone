@@ -29,16 +29,12 @@ const SubscribedVideosSectionSkeleton = () => {
 };
 
 const SubscribedVideosSectionSuspense = () => {
-const SubscribedVideosSectionSuspense = () => {
-    const [videos, query] =
-   trpc.videos.getManySubscribed.useSuspenseInfiniteQuery(
-    const [videos, query] =
-  trpc.videos.getManySubscribed.useSuspenseInfiniteQuery(
-    { limit: DEFAULT_LIMIT },
-    {
-      getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
-    },
-  );
+    const [videos, query] = trpc.videos.getManySubscribed.useSuspenseInfiniteQuery(
+        { limit: DEFAULT_LIMIT },
+        {
+            getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
+        },
+    );
 
     return (
         <div>
