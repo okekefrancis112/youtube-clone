@@ -24,34 +24,34 @@ import { THUMBNAIL_FALLBACK } from "@/modules/videos/constants";
 import { ThumbnailUploadModal } from "../components/thumbnail-upload-modal";
 import { ThumbnailGenerateModal } from "../components/thumbnail-generate-modal";
 import { Skeleton } from "@/components/ui/skeleton";
-import { AuthGate } from "../../auth-gate";
+// import { AuthGate } from "../../auth-gate";
 import { APP_URL } from "@/constants";
 
 interface FormSectionProps {
     videoId: string;
 }
 
-// export const FormSection = ({ videoId }: FormSectionProps) => {
-//     return (
-//         <Suspense fallback={<FormSectionSkeleton />}>
-//             <ErrorBoundary fallback={<p>Error</p>}>
-//                 <FormSectionSuspense videoId={videoId} />
-//             </ErrorBoundary>
-//         </Suspense>
-//     );
-// }
-
 export const FormSection = ({ videoId }: FormSectionProps) => {
-  return (
-    <AuthGate>
-      <Suspense fallback={<FormSectionSkeleton />}>
-        <ErrorBoundary fallback={<p>Error</p>}>
-          <FormSectionSuspense videoId={videoId} />
-        </ErrorBoundary>
-      </Suspense>
-    </AuthGate>
-  );
-};
+    return (
+        <Suspense fallback={<FormSectionSkeleton />}>
+            <ErrorBoundary fallback={<p>Error</p>}>
+                <FormSectionSuspense videoId={videoId} />
+            </ErrorBoundary>
+        </Suspense>
+    );
+}
+
+// export const FormSection = ({ videoId }: FormSectionProps) => {
+//   return (
+//     <AuthGate>
+//       <Suspense fallback={<FormSectionSkeleton />}>
+//         <ErrorBoundary fallback={<p>Error</p>}>
+//           <FormSectionSuspense videoId={videoId} />
+//         </ErrorBoundary>
+//       </Suspense>
+//     </AuthGate>
+//   );
+// };
 
 
 const FormSectionSkeleton = () => {

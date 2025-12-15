@@ -2,7 +2,7 @@ import { DEFAULT_LIMIT } from "@/constants";
 import { HistoryView } from "@/modules/playlists/ui/views/history-views";
 import { HydrateClient, trpc } from "@/trpc/server";
 
-const Page = () => {
+const Page = async () => {
     void trpc.playlists.getHistory.prefetchInfinite({ limit: DEFAULT_LIMIT })
     return (
         <HydrateClient>

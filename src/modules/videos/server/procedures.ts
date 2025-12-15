@@ -253,7 +253,6 @@ export const videosRouter = createTRPCRouter({
 
             if (user) {
                 userId = user.id;
-                console.log('Found user id:', userId);
             }
 
             const viewerReactions = db.$with("viewer_reactions").as(
