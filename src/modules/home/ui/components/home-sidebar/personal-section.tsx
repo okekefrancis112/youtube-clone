@@ -20,7 +20,7 @@ const items = [
     },
     {
         title: "All playlists",
-        url: "/feed/trending",
+        url: "/playlists",
         icon: ListVideoIcon,
         auth: true,
     }
