@@ -29,11 +29,9 @@ const SubscribedVideosSectionSkeleton = () => {
 };
 
 const SubscribedVideosSectionSuspense = () => {
-    // const [videos, query] = trpc.videos.getManySubscribed.useSuspenseInfiniteQuery({
-    //     limit: DEFAULT_LIMIT
-    // }, {
-    //     getNextPageParam: (lastPage) => lastPage.nextCursor,
-    // });
+const SubscribedVideosSectionSuspense = () => {
+    const [videos, query] =
+   trpc.videos.getManySubscribed.useSuspenseInfiniteQuery(
     const [videos, query] =
   trpc.videos.getManySubscribed.useSuspenseInfiniteQuery(
     { limit: DEFAULT_LIMIT },
