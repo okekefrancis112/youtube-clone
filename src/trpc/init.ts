@@ -1,75 +1,3 @@
-// import { db } from '@/db';
-// import { users } from '@/db/schema'
-// import { eq } from 'drizzle-orm';
-// // import { auth } from '@clerk/nextjs/server';
-// import { initTRPC, TRPCError } from '@trpc/server';
-// import { cache } from 'react';
-// import superjson from 'superjson';
-// import { ratelimit } from '@/lib/ratelimit';
-// import { currentUser, auth } from '@clerk/nextjs/server';
-// import { useAuth } from '@clerk/nextjs';
-
-
-// export const createTRPCContext = cache(async () => {
-//   const { userId } = await auth();
-//   console.log('Auth User ID:', userId);
-//   // const user = await currentUser();
-//   // const user = await useAuth();
-
-//   // console.log('Current User:', user);
-//   // console.log('Current User ID:', user?.id);
-
-//   // return { clerkUserId: user?.id };
-//   // return { clerkUserId: userId};
-//    return {
-//     clerkUserId: userId,
-//     headers: opts.req.headers,
-//   };
-// });
-
-// export type Context = Awaited<ReturnType<typeof createTRPCContext>>;
-
-// // Avoid exporting the entire t-object
-// // since it's not very descriptive.
-// // For instance, the use of a t variable
-// // is common in i18n libraries.
-// const t = initTRPC.context<Context>().create({
-//   /**
-//    * @see https://trpc.io/docs/server/data-transformers
-//    */
-//   transformer: superjson,
-// });
-// // Base router and procedure helpers
-// export const createTRPCRouter = t.router;
-// export const createCallerFactory = t.createCallerFactory;
-// export const baseProcedure = t.procedure;
-// export const protectedProcedure = t.procedure.use(async function isAuthed(opts) {
-//   const { ctx } = opts;
-
-//   if(!ctx.clerkUserId) {
-//     throw new TRPCError({ code: 'UNAUTHORIZED' });
-//   }
-
-//   const [user] = await db.select().from(users).where(eq(users.clerkId, ctx.clerkUserId)).limit(1);
-
-//   if (!user) {
-//     throw new TRPCError({ code: 'UNAUTHORIZED' });
-//   }
-
-//   const { success } = await ratelimit.limit(user.id);
-
-//   if (!success) {
-//     throw new TRPCError({ code: 'TOO_MANY_REQUESTS' });
-//   }
-
-//   return opts.next({
-//     ctx: {
-//       ...ctx,
-//       user,
-//     },
-//   });
-// });
-
 import { db } from '@/db';
 import { users } from '@/db/schema'
 import { eq } from 'drizzle-orm';
@@ -79,34 +7,20 @@ import { ratelimit } from '@/lib/ratelimit';
 import { auth, clerkClient } from '@clerk/nextjs/server';
 import type { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
 
-// export const createTRPCContext = async (opts: FetchCreateContextFnOptions) => {
-//   const { userId } = await auth();
-
-//   console.log('Auth User ID:', userId);
-//   console.log('Headers>>>>>>>>>>>>>>>>>:', opts.req.headers);
-
-//   return {
-//     clerkUserId: userId,
-//     headers: opts.req.headers,
-//   };
-// };
-
 export const createTRPCContext = async (opts?: FetchCreateContextFnOptions) => {
-  if (!opts) {
-    return { clerkUserId: null, isHydration: true, isSSR: true };
-  }
+  const { userId } = await auth();
 
-  const isClientHydration = typeof window !== "undefined" && !opts.req;
-  if (isClientHydration) {
-    return { clerkUserId: null, isHydration: true, isSSR: false };
-  }
+  console.log('Auth User ID:', userId);
+  console.log('Has opts:', !!opts);
+  console.log('Has req:', !!opts?.req);
 
-  try {
-    const { userId } = await auth();
-    return { clerkUserId: userId, isHydration: false, isSSR: false };
-  } catch {
-    return { clerkUserId: null, isHydration: false, isSSR: false };
-  }
+  // opts.req is only available in API route contexts, not during SSR prefetch
+  const requestHeaders = opts?.req?.headers;
+
+  return {
+    clerkUserId: userId,
+    headers: requestHeaders,
+  };
 };
 
 export type Context = Awaited<ReturnType<typeof createTRPCContext>>;
