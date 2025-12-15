@@ -61,7 +61,7 @@ export const PlaylistThumbnail = ({
                 </div>
             </div>
             {/* Video count indicator */}
-            <div className="absolute bottom-2 right-2 px-1 pu-0.5 rounded bg-blCK/80 text-white text-xs font-medium flex items-center gap-x-1">
+            <div className="absolute bottom-2 right-2 px-1 py-0.5 rounded bg-black/80 text-white text-xs font-medium flex items-center gap-x-1">
                 <ListVideoIcon className="size-4" />
                 {compactViews} videos
             </div>
