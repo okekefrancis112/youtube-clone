@@ -20,7 +20,7 @@ const formSchema = z.object({
 export const PlaylistCreateModal = ({
     open,
     onOpenChange,
-}: ThumbnailGenerateModalProps) => {
+}: PlaylistCreateModalProps) => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {

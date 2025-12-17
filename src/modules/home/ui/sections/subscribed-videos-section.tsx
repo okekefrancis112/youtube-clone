@@ -32,7 +32,7 @@ const SubscribedVideosSectionSuspense = () => {
     const [videos, query] = trpc.videos.getManySubscribed.useSuspenseInfiniteQuery(
         { limit: DEFAULT_LIMIT },
         {
-            getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
+            getNextPageParam: (lastPage) => lastPage.nextCursor,
         },
     );
 

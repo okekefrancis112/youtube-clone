@@ -33,7 +33,7 @@ export const PlaylistThumbnail = ({
         }, [videoCount]);
 
     return (
-        <div className={cn("relative pt-", className)}>
+        <div className={cn("relative pt-3", className)}>
             {/* Stack effect layers */}
             <div className="relative">
                 {/* Background layers */}
