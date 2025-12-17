@@ -47,7 +47,7 @@ export const playlistsRouter = createTRPCRouter({
                 throw new TRPCError({ code: "NOT_FOUND" });
             }
 
-            return
+            return existingPlaylist;
         }),
     getVideos: protectedProcedure
         .input(
