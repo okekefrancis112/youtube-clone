@@ -41,16 +41,13 @@ export const protectedProcedure = t.procedure.use(async function isAuthed(opts) 
     .where(eq(users.clerkId, ctx.clerkUserId))
     .limit(1);
 
-  // Auto-create user if they don't exist
   if (!user) {
     try {
       const clerk = await clerkClient();
       const clerkUser = await clerk.users.getUser(ctx.clerkUserId);
 
-      // Build name from firstName and lastName, with fallback
       const name = `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || 'Unknown User';
 
-      // imageUrl is required in your schema, so provide a fallback
       const imageUrl = clerkUser.imageUrl || `https://api.dicebear.com/7.x/initials/svg?seed=${name}`;
 
       [user] = await db

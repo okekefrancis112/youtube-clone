@@ -89,7 +89,6 @@ export const subscriptionsRouter = createTRPCRouter({
                 throw new TRPCError({ code: "BAD_REQUEST" });
             }
 
-            // ✅ FIXED: Use .delete() instead of .insert()
             const [deletedSubscription] = await db
                 .delete(subscriptions)
                 .where(
