@@ -10,106 +10,106 @@ import { z } from "zod";
 
 export const videosRouter = createTRPCRouter({
     getManySubscribed: protectedProcedure
-    .input(
-        z.object({
-            cursor: z.object({
-                id: z.string().uuid(),
-                updatedAt: z.date(),
-            })
-            .nullish(),
-            limit: z.number().min(1).max(100).default(20),
-        }),
-    )
-    .query(async ({ input, ctx }) => {
-        const { id: userId } = ctx.user;
-        const { cursor, limit } = input;
-
-        if (limit <= 0) {
-            return {
-                items: [],
-                nextCursor: null,
-            };
-        }
-
-        const viewerSubscription = db.$with("viewer_subscriptions").as(
-            db
-                .select({
-                    userId: subscriptions.creatorId,
+        .input(
+            z.object({
+                cursor: z.object({
+                    id: z.string().uuid(),
+                    updatedAt: z.date(),
                 })
-                .from(subscriptions)
-                .where(eq(subscriptions.viewerId, userId))
-        );
+                .nullish(),
+                limit: z.number().min(1).max(100).default(20),
+            }),
+        )
+        .query(async ({ input, ctx }) => {
+            const { id: userId } = ctx.user;
+            const { cursor, limit } = input;
 
-        try {
-            const data = await db
-                .with(viewerSubscription)
-                .select({
-                    ...getTableColumns(videos),
-                    user: users,
-                    viewCount: db.$count(videoViews, eq(videoViews.videoId, videos.id)),
-                    likeCount: db.$count(videoReactions, and(
-                        eq(videoReactions.videoId, videos.id),
-                        eq(videoReactions.type, "like"),
-                    )),
-                    dislikeCount: db.$count(videoReactions, and(
-                        eq(videoReactions.videoId, videos.id),
-                        eq(videoReactions.type, "dislike"),
-                    )),
-                })
-                .from(videos)
-                .innerJoin(users, eq(videos.userId, users.id))
-                .innerJoin(viewerSubscription, eq(viewerSubscription.userId, users.id))
-                .where(and(
-                    eq(videos.visibility, "public"),
-                    cursor
-                        ? or(
-                            lt(videos.updatedAt, cursor.updatedAt),
-                            and(
-                                eq(videos.updatedAt, cursor.updatedAt),
-                                lt(videos.id, cursor.id),
-                            )
-                        )
-                        : undefined,
-                ))
-                .orderBy(desc(videos.updatedAt), desc(videos.id))
-                .limit(limit + 1);
-
-            // Handle empty result set
-            if (!data || data.length === 0) {
+            if (limit <= 0) {
                 return {
                     items: [],
                     nextCursor: null,
                 };
             }
 
-            const hasMore = data.length > limit;
-            const items = hasMore ? data.slice(0, -1) : data;
+            const viewerSubscription = db.$with("viewer_subscriptions").as(
+                db
+                    .select({
+                        userId: subscriptions.creatorId,
+                    })
+                    .from(subscriptions)
+                    .where(eq(subscriptions.viewerId, userId))
+            );
 
-            // Calculate next cursor safely
-            let nextCursor = null;
-            if (hasMore && items.length > 0) {
-                const lastItem = items[items.length - 1];
-                if (lastItem && lastItem.id && lastItem.updatedAt) {
-                    nextCursor = {
-                        id: lastItem.id,
-                        updatedAt: lastItem.updatedAt,
+            try {
+                const data = await db
+                    .with(viewerSubscription)
+                    .select({
+                        ...getTableColumns(videos),
+                        user: users,
+                        viewCount: db.$count(videoViews, eq(videoViews.videoId, videos.id)),
+                        likeCount: db.$count(videoReactions, and(
+                            eq(videoReactions.videoId, videos.id),
+                            eq(videoReactions.type, "like"),
+                        )),
+                        dislikeCount: db.$count(videoReactions, and(
+                            eq(videoReactions.videoId, videos.id),
+                            eq(videoReactions.type, "dislike"),
+                        )),
+                    })
+                    .from(videos)
+                    .innerJoin(users, eq(videos.userId, users.id))
+                    .innerJoin(viewerSubscription, eq(viewerSubscription.userId, users.id))
+                    .where(and(
+                        eq(videos.visibility, "public"),
+                        cursor
+                            ? or(
+                                lt(videos.updatedAt, cursor.updatedAt),
+                                and(
+                                    eq(videos.updatedAt, cursor.updatedAt),
+                                    lt(videos.id, cursor.id),
+                                )
+                            )
+                            : undefined,
+                    ))
+                    .orderBy(desc(videos.updatedAt), desc(videos.id))
+                    .limit(limit + 1);
+
+                // Handle empty result set
+                if (!data || data.length === 0) {
+                    return {
+                        items: [],
+                        nextCursor: null,
                     };
                 }
-            }
 
-            return {
-                items,
-                nextCursor,
-            };
-        } catch (error) {
-            console.error("Error fetching subscribed videos:", error);
-            // Return empty array on error
-            return {
-                items: [],
-                nextCursor: null,
-            };
-        }
-    }),
+                const hasMore = data.length > limit;
+                const items = hasMore ? data.slice(0, -1) : data;
+
+                // Calculate next cursor safely
+                let nextCursor = null;
+                if (hasMore && items.length > 0) {
+                    const lastItem = items[items.length - 1];
+                    if (lastItem && lastItem.id && lastItem.updatedAt) {
+                        nextCursor = {
+                            id: lastItem.id,
+                            updatedAt: lastItem.updatedAt,
+                        };
+                    }
+                }
+
+                return {
+                    items,
+                    nextCursor,
+                };
+            } catch (error) {
+                console.error("Error fetching subscribed videos:", error);
+                // Return empty array on error
+                return {
+                    items: [],
+                    nextCursor: null,
+                };
+            }
+        }),
     getManyTrending: baseProcedure
         .input(
             z.object({
@@ -181,6 +181,7 @@ export const videosRouter = createTRPCRouter({
         .input(
             z.object({
                 categoryId: z.string().uuid().nullish(),
+                userId: z.string().uuid().nullish(),
                 cursor: z.object({
                     id: z.string().uuid(),
                     updatedAt: z.date(),
@@ -190,7 +191,7 @@ export const videosRouter = createTRPCRouter({
             }),
         )
         .query(async ({ input }) => {
-            const { cursor, limit, categoryId } = input;
+            const { cursor, limit, categoryId, userId } = input;
             const data = await db
                 .select({
                     ...getTableColumns(videos),
@@ -209,6 +210,7 @@ export const videosRouter = createTRPCRouter({
                 .innerJoin(users, eq(videos.userId, users.id))
                 .where( and (
                     eq(videos.visibility, "public"),
+                    userId ? eq(videos.userId, userId) : undefined,
                     categoryId ? eq(videos.categoryId, categoryId) : undefined,
                     cursor
                         ? or(

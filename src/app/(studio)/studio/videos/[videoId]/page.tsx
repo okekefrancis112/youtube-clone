@@ -23,32 +23,3 @@ const Page = async ({ params }: PageProps) => {
 }
 
 export default Page;
-
-// import { VideoView } from "@/modules/studio/ui/views/video-view";
-// import { HydrateClient, trpc } from "@/trpc/server";
-
-// export const dynamic = "force-dynamic";
-
-// interface PageProps {
-//   params: Promise<{
-//     videoId: string;
-//   }>;
-// }
-
-// const Page = async ({ params }: PageProps) => {
-//   const { videoId } = await params;
-
-//   // ❌ REMOVE THIS — protected procedure
-//   // void trpc.studio.getOne.prefetch({ id: videoId });
-
-//   // ✅ SAFE — public procedure
-//   void trpc.categories.getMany.prefetch();
-
-//   return (
-//     <HydrateClient>
-//       <VideoView videoId={videoId} />
-//     </HydrateClient>
-//   );
-// };
-
-// export default Page;

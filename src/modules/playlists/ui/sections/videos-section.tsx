@@ -50,19 +50,6 @@ const VideosSectionSuspense = ({ playlistId }: VideosSectionProps) => {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
     });
 
-    const addVideo = trpc.playlists.addVideo.useMutation({
-        onSuccess: (data) => {
-            toast.success("Video added to playlist");
-            utils.playlists.getMany.invalidate();
-            utils.playlists.getManyForVideo.invalidate({ videoId });
-            utils.playlists.getOne.invalidate({ id: data.playlistId });
-            utils.playlists.getVideos.invalidate({ playlistId: data.playlistId });
-        },
-        onError: () => {
-            toast.error("Something went wrong");
-        },
-    });
-
     const removeVideo = trpc.playlists.removeVideo.useMutation({
         onSuccess: (data) => {
             toast.success("Video removed from playlist");
