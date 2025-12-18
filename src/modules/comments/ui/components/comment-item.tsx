@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { CommentsGetManyOutput } from "../../types";
-import { UserAvatar } from "@/components/user-avartar";
+import { UserAvatar } from "@/components/user-avatar";
 import { formatDistanceToNow } from "date-fns";
 import { trpc } from "@/trpc/client";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";

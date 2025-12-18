@@ -1,4 +1,4 @@
-import { UserAvatar } from "@/components/user-avartar";
+import { UserAvatar } from "@/components/user-avatar";
 import { SubscriptionButton } from "./subscription-button";
 import { Skeleton } from "@/components/ui/skeleton";
 

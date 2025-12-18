@@ -1,6 +1,6 @@
 import { useAuth, useClerk } from "@clerk/nextjs";
 import { UserGetOneOutput } from "../../types";
-import { UserAvatar } from "@/components/user-avartar";
+import { UserAvatar } from "@/components/user-avatar";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { SubscriptionButton } from "@/modules/subscriptions/ui/components/subscription-button";

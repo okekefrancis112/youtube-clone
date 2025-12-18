@@ -3,7 +3,7 @@ import { VideoGetManyOutput } from "../../types";
 import { VideoThumbnail, VideoThumbnailSkeleton } from "./video-thumbnail";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { UserAvatar } from "@/components/user-avartar";
+import { UserAvatar } from "@/components/user-avatar";
 import { UserInfo } from "@/modules/users/ui/components/user-info";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { VideoMenu } from "./video-menu";
