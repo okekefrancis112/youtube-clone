@@ -41,7 +41,7 @@ export function TRPCProvider(
             return fetch(url, {
               ...opts,
               credentials: "include",
-            });
+            } as RequestInit);
           },
           async headers() {
             const headers = new Headers();
