@@ -66,7 +66,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SidebarHeader, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
-import { UserAvatar } from "@/components/user-avartar";
+import { UserAvatar } from "@/components/user-avatar";
 
 export const StudioSidebarHeader = () => {
     const { isLoaded, user } = useUser();
