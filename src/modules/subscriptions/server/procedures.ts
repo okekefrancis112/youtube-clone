@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { subscriptions, users, videoReactions, videos, videoViews } from "@/db/schema";
+import { subscriptions, users } from "@/db/schema";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
 import { and, desc, eq, getTableColumns, lt, or } from "drizzle-orm";
@@ -89,7 +89,6 @@ export const subscriptionsRouter = createTRPCRouter({
                 throw new TRPCError({ code: "BAD_REQUEST" });
             }
 
-            // ✅ FIXED: Use .delete() instead of .insert()
             const [deletedSubscription] = await db
                 .delete(subscriptions)
                 .where(

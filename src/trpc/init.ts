@@ -10,11 +10,6 @@ import type { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
 export const createTRPCContext = async (opts?: FetchCreateContextFnOptions) => {
   const { userId } = await auth();
 
-  console.log('Auth User ID:', userId);
-  console.log('Has opts:', !!opts);
-  console.log('Has req:', !!opts?.req);
-
-  // opts.req is only available in API route contexts, not during SSR prefetch
   const requestHeaders = opts?.req?.headers;
 
   return {
@@ -46,18 +41,13 @@ export const protectedProcedure = t.procedure.use(async function isAuthed(opts) 
     .where(eq(users.clerkId, ctx.clerkUserId))
     .limit(1);
 
-  // Auto-create user if they don't exist
   if (!user) {
-    console.log('⚠️ User not found in DB, creating from Clerk...');
-
     try {
       const clerk = await clerkClient();
       const clerkUser = await clerk.users.getUser(ctx.clerkUserId);
 
-      // Build name from firstName and lastName, with fallback
       const name = `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || 'Unknown User';
 
-      // imageUrl is required in your schema, so provide a fallback
       const imageUrl = clerkUser.imageUrl || `https://api.dicebear.com/7.x/initials/svg?seed=${name}`;
 
       [user] = await db
@@ -68,8 +58,6 @@ export const protectedProcedure = t.procedure.use(async function isAuthed(opts) 
           imageUrl: imageUrl,
         })
         .returning();
-
-      console.log('✅ User created in DB:', user.id);
     } catch (error) {
       console.error('❌ Failed to create user:', error);
       throw new TRPCError({

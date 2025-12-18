@@ -52,8 +52,6 @@ export async function POST(req: Request) {
             name: name,
             imageUrl: imageUrl,
         })
-
-        console.log('✅ User created in DB:', data.id)
     }
 
     if (eventType === 'user.updated') {
@@ -65,8 +63,6 @@ export async function POST(req: Request) {
             name: name,
             imageUrl: imageUrl,
         }).where(eq(users.clerkId, data.id))
-
-        console.log('✅ User updated in DB:', data.id)
     }
 
     if (eventType === 'user.deleted') {
