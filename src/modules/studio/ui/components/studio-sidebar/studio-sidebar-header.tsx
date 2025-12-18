@@ -24,7 +24,7 @@
 //         return (
 //             <SidebarMenuItem>
 //                 <SidebarMenuButton tooltip="Your Profile" asChild>
-//                     <Link href="/users/current">
+//                     <Link prefetch  href="/users/current">
 //                         <UserAvatar
 //                             imageUrl={user?.imageUrl}
 //                             name={user?.fullName ?? "User"}
@@ -38,7 +38,7 @@
 //     }
 //   return (
 //     <SidebarHeader className="flex items-center justify-center pb-4">
-//         <Link href="/users/current">
+//         <Link prefetch  href="/users/current">
 //             <UserAvatar
 //                 imageUrl={user.imageUrl}
 //                 name={user.fullName ?? "User"}
@@ -96,7 +96,7 @@ export const StudioSidebarHeader = () => {
     if (!user) {
         return (
             <SidebarHeader className="flex items-center justify-center pb-4">
-                <Link href="/sign-in">
+                <Link prefetch  href="/sign-in">
                     <Skeleton className="size-[112px] rounded-full hover:opacity-80 transition-opacity"/>
                 </Link>
                 <div className="flex flex-col items-center mt-2 gap-y-1">
@@ -115,7 +115,7 @@ export const StudioSidebarHeader = () => {
         return (
             <SidebarMenuItem>
                 <SidebarMenuButton tooltip="Your Profile" asChild>
-                    <Link href="/users/current">
+                    <Link prefetch  href="/users/current">
                         <UserAvatar
                             imageUrl={user.imageUrl}
                             name={user.fullName ?? "User"}
@@ -130,7 +130,7 @@ export const StudioSidebarHeader = () => {
 
     return (
         <SidebarHeader className="flex items-center justify-center pb-4">
-            <Link href="/users/current">
+            <Link prefetch  href="/users/current">
                 <UserAvatar
                     imageUrl={user.imageUrl}
                     name={user.fullName ?? "User"}

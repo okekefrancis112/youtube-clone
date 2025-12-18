@@ -22,49 +22,18 @@ export const CategoriesSection = ({ categoryId }: CategoriesSectionProps) => {
 }
 
 const CategoriesSkeleton = () => {
-  return <FilterCarousel isLoading data={[]} onSelect={() => console.log()} />
+  return <FilterCarousel isLoading data={[]} onSelect={() => {}} />
 }
-
-// const CategoriesSectionSuspense = ({ categoryId }: CategoriesSectionProps) => {
-//   const router = useRouter();
-//   const [categoriesResult]: any = trpc.categories.getMany.useSuspenseQuery();
-
-//   console.log("CategoriesSectionSuspense", { categoriesResult });
-
-//   // Extract the actual categories array from the json property
-//   const categories = categoriesResult.json || [];
-
-//   const data = categories.map((category: any) => ({
-//     value: category.id,
-//     label: category.name,
-//   }));
-
-//   const onSelect = (value: string | null) => {
-//     const url = new URL(window.location.href);
-
-//     if(value) {
-//       url.searchParams.set("categoryId", value);
-//     } else {
-//       url.searchParams.delete("categoryId");
-//     }
-
-//     router.push(url.toString());
-//   };
-
-//   return <FilterCarousel onSelect={onSelect} value={categoryId} data={data} />
-// }
 
 export const CategoriesSectionSuspense = ({ categoryId }: CategoriesSectionProps) => {
   const router = useRouter();
   const [categoriesResult] = trpc.categories.getMany.useSuspenseQuery();
 
-  // Type-safe extraction
   let categories: Category[] = [];
 
   if (isSuspenseResult<Category[]>(categoriesResult)) {
     categories = categoriesResult.json;
   } else if (Array.isArray(categoriesResult)) {
-    // Fallback: if it's ever just the array directly
     categories = categoriesResult;
   } else {
     console.error('Unexpected categories result structure:', categoriesResult);

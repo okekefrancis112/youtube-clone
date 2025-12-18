@@ -5,8 +5,13 @@ import {
     createSelectSchema,
     createUpdateSchema,
 } from "drizzle-zod";
+import { z } from "zod";
 
 export const reactionType = pgEnum("reaction_type", ["like", "dislike"]);
+export const videoVisibility = pgEnum("video_visibility", [
+    "public",
+    "private",
+]);
 
 export const playlistVideos = pgTable("playlist_videos", {
     playlistId: uuid("playlist_id").references(() => playlists.id, { onDelete: "cascade" }).notNull(),
@@ -103,11 +108,6 @@ export const subscriptionRelations = relations(subscriptions, ({ one }) => ({
     }),
 }));
 
-export const videoVisibility = pgEnum("video_visibility", [
-    "public",
-    "private",
-]);
-
 export const categories = pgTable("categories", {
     id: uuid("id").primaryKey().defaultRandom(),
     name: text("name").notNull().unique(),
@@ -145,7 +145,10 @@ export const videos = pgTable("videos", {
 });
 
 export const videoInsertSchema = createInsertSchema(videos);
-export const videoUpdateSchema = createUpdateSchema(videos);
+// export const videoUpdateSchema = createUpdateSchema(videos);
+export const videoUpdateSchema = createUpdateSchema(videos, {
+  visibility: z.enum(["public", "private"]).optional(),
+});
 export const videoSelectSchema = createSelectSchema(videos);
 
 export const videoRelations = relations(videos, ({ one, many }) => ({
