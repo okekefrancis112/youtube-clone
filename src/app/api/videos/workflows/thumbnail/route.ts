@@ -52,33 +52,20 @@ export const { POST } = serve(
     const tempThumbnailUrl = body.data[0]?.url;
 
     if (!tempThumbnailUrl) {
-        throw new Error("Bad request");
+        throw new Error("Bad request: Failed to generate thumbnail");
     }
-
-    // !TODO: TEST THIS CLEAN-UP PROPERLY
-
-    await context.run("cleanup-thumbnail", async () => {
-        if (video.thumbnailKey) {
-            await utapi.deleteFiles(video.thumbnailKey);
-            await db
-                .update(videos)
-                .set({ thumbnailUrl: null, thumbnailKey: null })
-                .where(and(
-                    eq(videos.id, videoId),
-                    eq(videos.userId, userId),
-                ));
-        }
-    });
 
     const uploadedThumbnail = await context.run("upload-thumbnail", async () => {
         const { data } = await utapi.uploadFilesFromUrl(tempThumbnailUrl);
 
         if (!data) {
-            throw new Error("Bad request");
+            throw new Error("Bad request: Failed to upload thumbnail");
         }
 
         return data;
     });
+
+    const oldThumbnailKey = video.thumbnailKey;
 
     await context.run("update-video", async () => {
         await db
@@ -86,11 +73,29 @@ export const { POST } = serve(
             .set({
                 thumbnailKey: uploadedThumbnail.key,
                 thumbnailUrl: uploadedThumbnail.url,
+                updatedAt: new Date(),
             })
             .where(and(
                 eq(videos.id, video.id),
                 eq(videos.userId, video.userId),
             ))
-        })
+    });
+
+    if (oldThumbnailKey) {
+        await context.run("cleanup-thumbnail", async () => {
+            try {
+                const deleteResult = await utapi.deleteFiles(oldThumbnailKey);
+
+                if (deleteResult.success) {
+                    console.log(`Successfully deleted old thumbnail: ${oldThumbnailKey}`);
+                } else {
+                    console.warn(`Failed to delete old thumbnail: ${oldThumbnailKey}`, deleteResult);
+                }
+
+            } catch (error) {
+                console.error(`Error cleaning up thumbnail ${oldThumbnailKey}:`, error);
+            }
+        });
+    }
   }
 )

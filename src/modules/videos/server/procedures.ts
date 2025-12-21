@@ -382,10 +382,13 @@ export const videosRouter = createTRPCRouter({
                 throw new TRPCError({ code: "BAD_REQUEST" });
             }
 
+            const tracks = asset.tracks || [];
+
+            const audioTracks = tracks.filter(track => track.type === "audio");
+
+
             const playbackId =  asset.playback_ids?.[0].id ?? null;
             const duration = asset.duration ? Math.round(asset.duration * 1000) : 0;
-
-            // TODO: Potentially find a way to revalidate trackId and trackStatus as well
 
             const [updatedVideo] = await db
                 .update(videos)
@@ -394,6 +397,9 @@ export const videosRouter = createTRPCRouter({
                     muxPlaybackId: playbackId,
                     muxAssetId: asset.id,
                     duration,
+
+                    muxTrackId: audioTracks[0]?.id || null,
+                    muxTrackStatus: audioTracks[0]?.status || null,
                 })
                 .where(and(
                     eq(videos.id, input.id),
@@ -531,7 +537,7 @@ export const videosRouter = createTRPCRouter({
                     },
                 ],
             },
-            cors_origin: "*", // TODO: set to my url in production
+            cors_origin: "*",
         })
 
         const [video] = await db

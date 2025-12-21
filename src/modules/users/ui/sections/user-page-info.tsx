@@ -8,8 +8,6 @@ import { useSubscription } from "@/modules/subscriptions/hooks/use-subscriptions
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 
-// TODO: Capitalize the user name
-
 interface UserPageBannerProps {
     user: UserGetOneOutput;
 }
